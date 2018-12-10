@@ -231,6 +231,10 @@ arbitraryClientCredential SSL3 = do
     -- for SSL3 there is no EC but only RSA/DSA
     creds <- arbitraryCredentialsOfEachType
     elements (take 2 creds) -- RSA and DSA, but not Ed25519 and Ed448
+arbitraryClientCredential TLS13 = do
+    -- DSA was obsoleted in TLS 1.3
+    creds <- arbitraryCredentialsOfEachType
+    elements (take 1 creds ++ drop 2 creds) -- RSA, Ed25519 and Ed448
 arbitraryClientCredential _    = arbitraryCredentialsOfEachType >>= elements
 
 arbitraryRSACredentialWithUsage :: [ExtKeyUsageFlag] -> Gen (CertificateChain, PrivKey)
